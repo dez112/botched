@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 #TODO dodac model dla technokracji
 class Chronicle(models.Model):
@@ -35,7 +36,8 @@ class Base(models.Model):
         (1, "Dynamic"),
         (2, "Static"),
         (3, "Primordial"),
-        (4, "Questing")
+        (4, "Questing"),
+        (5, "Brak")
     ]
 
     player = models.CharField(max_length=200)
@@ -44,9 +46,9 @@ class Base(models.Model):
     nature = models.IntegerField(choices=NATURE_CHOICES)
     demenor = models.IntegerField(choices=NATURE_CHOICES)
     essence = models.IntegerField(choices=ESSENCE_CHOICES)
-    willpower = models.IntegerField() #TODO dodac walidator 1-10
-    traits = models.TextField()
-    backgrounds = models.TextField()
+    willpower = models.PositiveIntegerField() #TODO dodac walidator 1-10
+    traits = models.TextField(null=True, default="Empty")
+    backgrounds = models.TextField(null=True)
     is_technocrat = models.BooleanField(default=False)
     is_mage = models.BooleanField(default=False)
     is_independent_mage = models.BooleanField(default=False)
@@ -56,6 +58,10 @@ class Base(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        #return reverse('schoolsubject-edit', kwargs={'pk': self.id})
+        return reverse('base-list')
 
 
 class Attributes(models.Model):

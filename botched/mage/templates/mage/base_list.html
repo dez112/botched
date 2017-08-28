@@ -1,6 +1,6 @@
 <h1>Characters</h1>
 <ul>
-{% base in object_list %}
+{% for base in object_list %}
     <li>{{ base.name }}</li>
 {% empty %}
     <li>No characters yet.</li>
