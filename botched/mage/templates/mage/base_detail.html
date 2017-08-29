@@ -1,2 +1,14 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<p>Chronicle: {{ object.chname }}</p>
 <h1>{{ object.name }}</h1>
-<p>{{ object.player }}</p>
+<h3>Player: {{ object.player }}</h3>
+<p>Nature: {{ object.nature }}</p>
+<p>Demenor: {{ object.demenor }}</p>
+<p>Willpower: {{ object.willpower }}</p>
+<p>Traits: {{ object.traits }}</p>
+
+{% endblock %}
+
+

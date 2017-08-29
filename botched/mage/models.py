@@ -1,7 +1,18 @@
 from django.db import models
 from django.urls import reverse
 
-#TODO dodac model dla technokracji
+#TODO rozwazyc dodanie verbose names
+#TODO rozwazyc osobna tabelke dla secondary abilities
+
+ESSENCE_CHOICES = [
+    (1, "Dynamic"),
+    (2, "Static"),
+    (3, "Primordial"),
+    (4, "Questing"),
+    (5, "None")
+]
+
+
 class Chronicle(models.Model):
     name = models.CharField(max_length=250)
 
@@ -32,36 +43,29 @@ class Base(models.Model):
         (21, "Visionary")
     ]
 
-    ESSENCE_CHOICES = [
-        (1, "Dynamic"),
-        (2, "Static"),
-        (3, "Primordial"),
-        (4, "Questing"),
-        (5, "Brak")
-    ]
+
 
     player = models.CharField(max_length=200)
     chname = models.ForeignKey('Chronicle')
     name = models.CharField(max_length=200)
     nature = models.IntegerField(choices=NATURE_CHOICES)
     demenor = models.IntegerField(choices=NATURE_CHOICES)
-    essence = models.IntegerField(choices=ESSENCE_CHOICES)
     willpower = models.PositiveIntegerField() #TODO dodac walidator 1-10
     traits = models.TextField(null=True, default="Empty")
-    backgrounds = models.TextField(null=True)
+    backgrounds = models.TextField(null=True, default="Empty")
     is_technocrat = models.BooleanField(default=False)
     is_mage = models.BooleanField(default=False)
     is_independent_mage = models.BooleanField(default=False)
     is_enemy = models.BooleanField()
     is_player_character = models.BooleanField(default=False)
-    # picture = ImageField(upload_to=/media/photos/, blank=True, null=True)
+    picture = models.ImageField(upload_to='photos/', blank=True, null=True, default='/media/photos/nophoto.jpg')
 
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
-        #return reverse('schoolsubject-edit', kwargs={'pk': self.id})
-        return reverse('base-list')
+        return reverse('base-detail-view', kwargs={'pk': self.id})
+        #return reverse('base-list')
 
 
 class Attributes(models.Model):
@@ -75,6 +79,7 @@ class Attributes(models.Model):
     perception = models.IntegerField(null=True)
     intelligencee = models.IntegerField(null=True)
     wits = models.IntegerField(null=True)
+    date_sent = models.DateTimeField(auto_now_add=True)
 
 
 class Abilities(models.Model):
@@ -112,11 +117,16 @@ class Abilities(models.Model):
     occult = models.IntegerField(null=True)
     politics = models.IntegerField(null=True)
     science = models.IntegerField(null=True)
+    secondary_abilities = models.CharField(max_length=300, null=True)
+    date_sent = models.DateTimeField(auto_now_add=True)
 
 class Spheres(models.Model):
-    AFFINITY_SPHERE = ((1, "Correspondence"), (2, "Entropy"), (3, "Forces"), (4, "Life"),
-                      (5, "Matter"), (6, "Mind"), (7, "Prime"), (8, "Spirit"), (9, "Time"))
+    AFFINITY_SPHERE = [(1, "Correspondence"), (2, "Entropy"), (3, "Forces"), (4, "Life"),
+                      (5, "Matter"), (6, "Mind"), (7, "Prime"), (8, "Spirit"), (9, "Time")]
     name = models.ForeignKey('Base')
+    tradition = models.CharField(max_length=200, null=True)
+    avatar = models.PositiveIntegerField(null=True)
+    essence = models.IntegerField(choices=ESSENCE_CHOICES)
     correspondence = models.IntegerField(null=True)
     entropy = models.IntegerField(null=True)
     forces = models.IntegerField(null=True)
@@ -127,6 +137,28 @@ class Spheres(models.Model):
     spirit = models.IntegerField(null=True)
     time = models.IntegerField(null=True)
     affinity_sphere = models.IntegerField(choices=AFFINITY_SPHERE, null=True)
+    date_sent = models.DateTimeField(auto_now_add=True)
+
+
+class TechnocracySpheres(models.Model):
+    AFFINITY_SPHERE = [(1, "Data"), (2, "Dimensional Science"), (3, "Entropy"), (4, "Forces"), (5, "Life"),
+                       (6, "Matter"), (7, "Mind"), (8, "Primal Utility"), (9, "Time")]
+    name = models.ForeignKey('Base')
+    Union = models.CharField(max_length=200, null=True)
+    avatar = models.PositiveIntegerField(null=True)
+    essence = models.IntegerField(choices=ESSENCE_CHOICES)
+    data = models.IntegerField(null=True)
+    dimensional_science = models.IntegerField(null=True, verbose_name="dimensional science")
+    entropy = models.IntegerField(null=True)
+    forces = models.IntegerField(null=True)
+    life = models.IntegerField(null=True)
+    matter = models.IntegerField(null=True)
+    mind = models.IntegerField(null=True)
+    primal_utility = models.IntegerField(null=True, verbose_name="primal utility")
+    time = models.IntegerField(null=True)
+    affinity_sphere = models.IntegerField(choices=AFFINITY_SPHERE, null=True)
+    date_sent = models.DateTimeField(auto_now_add=True)
+
 
 
 
