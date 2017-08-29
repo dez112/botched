@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+<p><a href="{% url 'base-update-view' pk=pk %}">Edit</a></p>
 
 <p>Chronicle: {{ object.chname }}</p>
 <h1>{{ object.name }}</h1>
@@ -8,6 +9,9 @@
 <p>Demenor: {{ object.demenor }}</p>
 <p>Willpower: {{ object.willpower }}</p>
 <p>Traits: {{ object.traits }}</p>
+
+<p><a href="attributes-create-view">Add Attributes</a> </p>
+<p><a href="abilities-create-view">Add Abilities</a> </p>
 
 {% endblock %}
 

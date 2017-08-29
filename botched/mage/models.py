@@ -19,6 +19,10 @@ class Chronicle(models.Model):
     def __str__(self):
         return self.name
 
+    def get_absolute_url(self):
+        return reverse('chronicle-list')
+        # return reverse('base-list')
+
 class Base(models.Model):
     NATURE_CHOICES = [
         (1, "Activist"),
@@ -42,8 +46,6 @@ class Base(models.Model):
         (20, "Trickster"),
         (21, "Visionary")
     ]
-
-
 
     player = models.CharField(max_length=200)
     chname = models.ForeignKey('Chronicle')
@@ -81,6 +83,9 @@ class Attributes(models.Model):
     wits = models.IntegerField(null=True)
     date_sent = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return "{}".format(self.name)
+     
 
 class Abilities(models.Model):
     name = models.ForeignKey('Base')
@@ -120,6 +125,9 @@ class Abilities(models.Model):
     secondary_abilities = models.CharField(max_length=300, null=True)
     date_sent = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return "{}".format(self.name)
+    
 class Spheres(models.Model):
     AFFINITY_SPHERE = [(1, "Correspondence"), (2, "Entropy"), (3, "Forces"), (4, "Life"),
                       (5, "Matter"), (6, "Mind"), (7, "Prime"), (8, "Spirit"), (9, "Time")]
@@ -139,6 +147,8 @@ class Spheres(models.Model):
     affinity_sphere = models.IntegerField(choices=AFFINITY_SPHERE, null=True)
     date_sent = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return "{}".format(self.name)
 
 class TechnocracySpheres(models.Model):
     AFFINITY_SPHERE = [(1, "Data"), (2, "Dimensional Science"), (3, "Entropy"), (4, "Forces"), (5, "Life"),
@@ -159,6 +169,8 @@ class TechnocracySpheres(models.Model):
     affinity_sphere = models.IntegerField(choices=AFFINITY_SPHERE, null=True)
     date_sent = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return "{}".format(self.name)
 
 
 

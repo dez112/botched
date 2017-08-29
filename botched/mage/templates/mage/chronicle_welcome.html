@@ -2,9 +2,9 @@
 {% block content %}
 
 <h1>Welcome to your Chronicle, MG :)</h1>
-
-<a href="{% url 'base-list' %}">NPCs</a>
-
+<ul>
+    <li><a href="{% url 'base-list' pk=pk %}">NPCs</a></li>
+</ul>
 
 
 {% endblock %}
