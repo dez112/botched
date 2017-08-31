@@ -1,14 +1,16 @@
 {% extends 'base.html' %}
+{% block section_title %}Chronicles{% endblock %}
+
+
 {% block content %}
 
-<h1>Characters</h1>
-<ul>
 {% for base in object_list %}
-    <li><a href="{% url 'chronicle-welcome' pk=base.id %}">{{ base.name }}</a> </li>
+   <a href="{% url 'chronicle-welcome' pk=base.id %}">{{ base.name }}</a><br/>
 {% empty %}
-    <li>No characters yet.</li>
+   No characters yet.
 {% endfor %}
-    <li><a href="{% url 'chronicle-create-view' %}">Add Chronicle</a></li>
-</ul>
+{% endblock %}
 
+{% block add_new %}
+    <a href="{% url 'chronicle-create-view' %}" class="btnghost">Add Chronicle</a>
 {% endblock %}

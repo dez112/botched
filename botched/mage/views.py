@@ -4,6 +4,7 @@ from django.views.generic.list import ListView
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views import View
+from django.forms.models import model_to_dict
 from . import models
 
 
@@ -33,25 +34,25 @@ class BaseListView(View):
                       {"object_list": character, "chronicle_name": chronicle.name})
 
 
-class BaseDetailView(View):
+class BaseDetailView(View): #TODO change to case    
     def get(self, request, pk):
         character = models.Base.objects.get(pk=pk)
+        attr_all = models.Attributes.objects.all().filter(name=character)
+        abil_all = models.Abilities.objects.all().filter(name=character)
+        spheres_get = models.Spheres.objects.filter(name=character)
+        techspheres_get = models.TechnocracySpheres.objects.filter(name=character)
 
-        if (models.Attributes.objects.all().filter(name=character).exists()) and \
-                (models.Abilities.objects.all().filter(name=character).exists()):
-
-            attributes = models.Attributes.objects.filter(name=character)
-            abilities = models.Abilities.objects.filter(name=character)
-
+        if (attr_all.exists()) and (abil_all.exists()):
+            attributes = attr_all
+            abilities = abil_all
             if character.is_technocrat:
-                techspheres = models.TechnocracySpheres.objects.filter(name=character)
+                techspheres = techspheres_get
                 return render(request, 'mage/base_detail__abat_m.html', {'object': character,
                                                                          'attr': attributes,
                                                                          'abili': abilities,
                                                                          'spheres': techspheres})
-
             elif character.is_mage:
-                spheres = models.Spheres.objects.filter(name=character)
+                spheres = spheres_get
                 return render(request, 'mage/base_detail_abat_m.html', {'object': character,
                                                                         'attr': attributes,
                                                                         'abili': abilities,
@@ -61,38 +62,33 @@ class BaseDetailView(View):
                                                                 'attr': attributes,
                                                                 'abili': abilities})
 
-        elif not(models.Attributes.objects.all().filter(name=character).exists()) and \
-                (models.Abilities.objects.all().filter(name=character).exists()):
-
-            abilities = models.Abilities.objects.filter(name=character)
-
+        elif not(attr_all.exists()) and (abil_all.exists()):
+            abilities = abil_all
             if character.is_technocrat:
-                techspheres = models.TechnocracySpheres.objects.filter(name=character)
+                techspheres = techspheres_get
                 return render(request, 'mage/base_detail_ab_m.html', {'object': character,
                                                                       'abili': abilities,
                                                                       'spheres': techspheres})
 
             elif character.is_mage:
-                spheres = models.Spheres.objects.filter(name=character)
+                spheres = spheres_get
                 return render(request, 'mage/base_detail_ab_m.html', {'object': character,
                                                                       'abili': abilities,
                                                                       'spheres': spheres})
 
             return render(request, 'mage/base_detail_ab.html', {'object': character, 'abili': abilities})
 
-        elif (models.Attributes.objects.all().filter(name=character).exists()) and \
-                not (models.Abilities.objects.all().filter(name=character).exists()):
-
-            attributes = models.Attributes.objects.filter(name=character)
+        elif (attr_all.exists()) and not(abil_all.exists()):
+            attributes = attr_all
 
             if character.is_technocrat:
-                techspheres = models.TechnocracySpheres.objects.filter(name=character)
+                techspheres = techspheres_get
                 return render(request, 'mage/base_detail_at_m.html', {'object': character,
                                                                       'attr': attributes,
                                                                       'spheres': techspheres})
 
             elif character.is_mage:
-                spheres = models.Spheres.objects.filter(name=character)
+                spheres = spheres_get
                 return render(request, 'mage/base_detail_at_m.html', {'object': character,
                                                                       'attr': attributes,
                                                                       'spheres': spheres})
@@ -100,12 +96,14 @@ class BaseDetailView(View):
             return render(request, 'mage/base_detail_at.html', {'object': character, 'attr': attributes})
 
         elif character.is_technocrat:
-                techspheres = models.TechnocracySpheres.objects.filter(name=character)
-                return render(request, 'mage/base_detail_m.html', {'object': character, 'spheres': techspheres})
+                techspheres = techspheres_get
+                return render(request, 'mage/base_detail_m.html',
+                              {'object': character, 'spheres': techspheres})
 
-        elif character.is_mage:
-                spheres = models.Spheres.objects.filter(name=character)
-                return render(request, 'mage/base_detail_m.html', {'object': character, 'spheres': spheres})
+        elif character.is_mage: #TODO nie dziala
+            spheres = spheres_get
+            return render(request, 'mage/base_detail_m.html',
+                          {'object': character, 'spheres': spheres})
 
         else:
             return render(request, 'mage/base_detail.html', {'object': character})
@@ -113,7 +111,8 @@ class BaseDetailView(View):
 
 class BaseCreateView(CreateView):
     model = models.Base
-    fields = '__all__'
+    fields = ['player', 'name', 'nature', 'demenor', 'willpower', 'traits', 'backgrounds', 'is_technocrat',
+              'is_mage', 'is_enemy', 'is_player_character', '']
     template_name = "mage/generic_form.html"
 
 
@@ -130,27 +129,24 @@ class BaseDeleteView(DetailView): #TODO delete view - nie dziala :(
 
 
 ####### Attributes related views
-class AttributesListView(View):
-    def get(self, request, pk):
-        chronicle = models.Chronicle.objects.get(pk=pk)
-        character = models.Base.objects.filter(chname=chronicle)
-        return render(request, "mage/generic_list.html",
-                      {"object_list": character, "chronicle_name": chronicle.name})
-
-
-class AttributesDetailView(DetailView):
-    model = models.Attributes
-
-
 class AttributesCreateView(CreateView):
     model = models.Attributes
-    fields = '__all__'
+    fields = ['strength', 'dexterity', 'stamina', 'charisma', 'manipulation', 'apperance', 'perception',
+              'intelligencee', 'wits'] 
     template_name = "mage/generic_form.html"
+    success_url = "mage/chronicle_welcome.html" #TODO poprawic, bo nie działa. Jak miałoby?
+
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.name_id = int(self.request.GET['mage'])
+        obj.save()
+        return render(self.request, self.success_url)
 
 
 class AttributesUpdateView(UpdateView):
     model = models.Attributes
-    fields = '__all__'
+    fields = ['strength', 'dexterity', 'stamina', 'charisma', 'manipulation', 'apperance', 'perception',
+              'intelligencee', 'wits']
     template_name = "mage/generic_form.html"
 
 
@@ -159,23 +155,17 @@ class AttributesDeleteView(DetailView): #TODO delete view - nie dziala :(
 
 
 ####### Abilities related views
-class AbilitieListView(ListView):
-    model = models.Abilities
-    template_name = "mage/generic_list.html"
-
-    #def get_queryset(self): #warning TODO get_queryset
-
-    #def get_context_data(self, **kwargs): #warning TODO get_context_data
-
-
-class AbilitiesDetailView(DetailView):
-    model = models.Abilities
-
-
 class AbilitiesCreateView(CreateView):
     model = models.Abilities
     fields = '__all__'
     template_name = "mage/generic_form.html"
+    #TODO dodac sucess url, bo dupa :(
+    
+    def form_valid(self, form):
+        obj = form.save(commit=False)
+        obj.name_id = int(self.request.GET['mage'])
+        obj.save()
+        return render(self.request, self.success_url)
 
 
 class AbilitiesUpdateView(UpdateView):

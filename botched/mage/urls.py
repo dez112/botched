@@ -36,12 +36,6 @@ urlpatterns = [
     url(r'^characters/edit-character/(?P<pk>(\d)+)', views.BaseUpdateView.as_view(), name="base-update-view"),
 
 ############################################### ATTRIBUTES
-    #/mage/characters/attributes
-    #url(r'^characters/attributes/$', views.AttributesListView.as_view(), name="base-list"),
-
-    #mage/characters/attributes/pk
-    url(r'^characters/attributes/(?P<pk>(\d)+)', views.AttributesDetailView.as_view(), name="attributes-detail-view"),
-
     #/mage/characters/attributes/add-attribute
     url(r'^characters/attributes/add-attribute', views.AttributesCreateView.as_view(),
         name="attributes-create-view"),
@@ -51,26 +45,20 @@ urlpatterns = [
         name="attributes-delete-view"),
 
     #/mage/characters/attributes/edit-attribute/pk
-    url(r'^characters/attributes/edit-attribute/(?P<pk>(\d)+)', views.AttributesUpdateView.as_view(), name="attributes-update-view"),
+    url(r'^characters/attributes/edit-attribute/(?P<pk>(\d)+)', views.AttributesUpdateView.as_view(),
+        name="attributes-update-view"),
 
 ############################################### ABILITIES
-    #/mage/characters
-    #url(r'^characters/$', views.BaseListView.as_view(), name="base-list"),
-
-    #mage/characters/pk
-    url(r'^characters/abilities/(?P<pk>(\d)+)', views.BaseDetailView.as_view(),
-        name="abilities-detail-view"),
-
     #/mage/characters/add-character
-    url(r'^characters/abilities/add-abilities', views.BaseCreateView.as_view(),
+    url(r'^characters/abilities/add-abilities', views.AbilitiesCreateView.as_view(),
         name="abilities-create-view"),
 
     #/mage/characters/delete-character/pk
-    url(r'^characters/abilities/delete-abilities/(?P<pk>(\d)+)', views.BaseDeleteView.as_view(),
+    url(r'^characters/abilities/delete-abilities/(?P<pk>(\d)+)', views.AbilitiesDeleteView.as_view(),
         name="abilities-delete-view"),
 
     #/mage/characters/edit-character/pk
-    url(r'^characters/abilities/edit-abilities/(?P<pk>(\d)+)', views.BaseUpdateView.as_view(),
+    url(r'^characters/abilities/edit-abilities/(?P<pk>(\d)+)', views.AbilitiesUpdateView.as_view(),
         name="abilities-update-view"),
 
 ############################################### SPHERES
@@ -106,4 +94,4 @@ urlpatterns = [
     url(r'^characters/edit-character/(?P<pk>(\d)+)', views.BaseUpdateView.as_view(), name="base-update-view"),
 
 
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

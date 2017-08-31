@@ -1,10 +1,13 @@
 {% extends 'base.html' %}
+
+
+{% block section_title %}Welcome to your Chronicle, MG{% endblock %}
+
 {% block content %}
 
-<h1>Welcome to your Chronicle, MG :)</h1>
-<ul>
-    <li><a href="{% url 'base-list' pk=pk %}">NPCs</a></li>
-</ul>
+
+<a href="{% url 'base-list' pk=pk %}">NPCs</a><br/>
+
 
 
 {% endblock %}

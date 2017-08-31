@@ -1,14 +1,17 @@
 {% extends 'base.html' %}
+
+
+{% block section_title %}Characters{% endblock %}
+
 {% block content %}
-
-<h1>Characters</h1>
-<ul>
 {% for base in object_list %}
-    <li><a href="{% url 'base-detail-view' pk=base.id %}">{{ base.name }}</a> </li>
+   <a href="{% url 'base-detail-view' pk=base.id %}">{{ base.picture }}</a><br/>
 {% empty %}
-    <li>No characters yet.</li>
+    No characters yet.
 {% endfor %}
-    <li><a href="{% url 'base-create-view' %}">Add Character</a></li>
-</ul>
 
+{% endblock %}
+
+{% block add_new %}
+    <a href="{% url 'base-create-view' %}" class="btnghost">Add Character</a>
 {% endblock %}

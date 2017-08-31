@@ -1,0 +1,9 @@
+{% extends 'mage/base_detail.html' %}
+{% block details %}
+<ul>
+{% for base in spheres %}
+    <li><{{ base }} </li>
+{% endfor %}
+</ul>
+
+{% endblock %}
