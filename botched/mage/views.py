@@ -5,6 +5,7 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views import View
 from django.forms.models import model_to_dict
+from django.core.exceptions import ObjectDoesNotExist
 from . import models
 
 
@@ -34,85 +35,68 @@ class BaseListView(View):
                       {"object_list": character, "chronicle_name": chronicle.name})
 
 
-class BaseDetailView(View): #TODO change to case    
+class BaseDetailView(View):    
     def get(self, request, pk):
         character = models.Base.objects.get(pk=pk)
-        attr_all = models.Attributes.objects.all().filter(name=character)
-        abil_all = models.Abilities.objects.all().filter(name=character)
-        spheres_get = models.Spheres.objects.filter(name=character)
-        techspheres_get = models.TechnocracySpheres.objects.filter(name=character)
+        
+        #check if character has attributes
+        try:
+            attr_all = models.Attributes.objects.get(name=character)
+        except ObjectDoesNotExist:
+            attr_all = None
 
-        if (attr_all.exists()) and (abil_all.exists()):
+        # check if character has abilities
+        try:
+            abil_all = models.Abilities.objects.get(name=character)
+        except ObjectDoesNotExist:
+            abil_all = None
+
+        # check if character has spheres
+        try:
+            spheres_get = models.Spheres.objects.get(name=character)
+        except ObjectDoesNotExist:
+            spheres_get = None
+
+        # check if character has techspheres
+        try:
+            techspheres_get = models.TechnocracySpheres.objects.get(name=character)
+        except ObjectDoesNotExist:
+            techspheres_get = None
+    
+        # go to correct template    
+        if (attr_all != None) and (abil_all != None):
             attributes = attr_all
             abilities = abil_all
-            if character.is_technocrat:
-                techspheres = techspheres_get
-                return render(request, 'mage/base_detail__abat_m.html', {'object': character,
-                                                                         'attr': attributes,
-                                                                         'abili': abilities,
-                                                                         'spheres': techspheres})
-            elif character.is_mage:
-                spheres = spheres_get
-                return render(request, 'mage/base_detail_abat_m.html', {'object': character,
-                                                                        'attr': attributes,
-                                                                        'abili': abilities,
-                                                                        'spheres': spheres})
-
             return render(request, 'mage/base_detail_abat.html', {'object': character,
-                                                                'attr': attributes,
-                                                                'abili': abilities})
+                                                                  'spheres': spheres_get,
+                                                                  'techspheres': techspheres_get, 
+                                                                  'attr': attributes,
+                                                                  'abili': abilities})
 
-        elif not(attr_all.exists()) and (abil_all.exists()):
+        elif (attr_all == None) and (abil_all != None):
             abilities = abil_all
-            if character.is_technocrat:
-                techspheres = techspheres_get
-                return render(request, 'mage/base_detail_ab_m.html', {'object': character,
-                                                                      'abili': abilities,
-                                                                      'spheres': techspheres})
+            return render(request, 'mage/base_detail_ab.html', {'object': character,
+                                                                'spheres': spheres_get,
+                                                                'techspheres': techspheres_get,
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              'abili': abilities})
 
-            elif character.is_mage:
-                spheres = spheres_get
-                return render(request, 'mage/base_detail_ab_m.html', {'object': character,
-                                                                      'abili': abilities,
-                                                                      'spheres': spheres})
-
-            return render(request, 'mage/base_detail_ab.html', {'object': character, 'abili': abilities})
-
-        elif (attr_all.exists()) and not(abil_all.exists()):
+        elif (attr_all != None) and (abil_all == None):
             attributes = attr_all
-
-            if character.is_technocrat:
-                techspheres = techspheres_get
-                return render(request, 'mage/base_detail_at_m.html', {'object': character,
-                                                                      'attr': attributes,
-                                                                      'spheres': techspheres})
-
-            elif character.is_mage:
-                spheres = spheres_get
-                return render(request, 'mage/base_detail_at_m.html', {'object': character,
-                                                                      'attr': attributes,
-                                                                      'spheres': spheres})
-
-            return render(request, 'mage/base_detail_at.html', {'object': character, 'attr': attributes})
-
-        elif character.is_technocrat:
-                techspheres = techspheres_get
-                return render(request, 'mage/base_detail_m.html',
-                              {'object': character, 'spheres': techspheres})
-
-        elif character.is_mage: #TODO nie dziala
-            spheres = spheres_get
-            return render(request, 'mage/base_detail_m.html',
-                          {'object': character, 'spheres': spheres})
+            return render(request, 'mage/base_detail_at.html', {'object': character,
+                                                                'spheres': spheres_get,
+                                                                'techspheres': techspheres_get,
+                                                                'attr': attributes})
 
         else:
-            return render(request, 'mage/base_detail.html', {'object': character})
+            return render(request, 'mage/base_detail.html', {'object': character, 
+                                                             'spheres': spheres_get,
+                                                             'techspheres': techspheres_get})
 
 
 class BaseCreateView(CreateView):
     model = models.Base
-    fields = ['player', 'name', 'nature', 'demenor', 'willpower', 'traits', 'backgrounds', 'is_technocrat',
-              'is_mage', 'is_enemy', 'is_player_character', '']
+    fields = ['player', 'chname', 'name', 'nature', 'demenor', 'willpower', 'traits', 'backgrounds', 'is_technocrat',
+              'is_mage', 'is_enemy', 'is_player_character', ]
     template_name = "mage/generic_form.html"
 
 
@@ -179,19 +163,6 @@ class AbilitiesDeleteView(DetailView): #TODO delete view - nie dziala :(
 
 
 ####### Mage related views
-class SpheresListView(ListView):
-    model = models.Spheres
-    template_name = "mage/generic_list.html"
-
-    #def get_queryset(self): #warning TODO get_queryset
-
-    #def get_context_data(self, **kwargs): #warning TODO get_context_data
-
-
-class SpheresDetailView(DetailView):
-    model = models.Spheres
-
-
 class SpheresCreateView(CreateView):
     model = models.Spheres
     fields = '__all__'
@@ -209,19 +180,6 @@ class SpheresDeleteView(DetailView): #TODO delete view - nie dziala :(
 
 
 ####### Technocrat related views
-class TechnocracySpheresListView(ListView):
-    model = models.TechnocracySpheres
-    template_name = "mage/generic_list.html"
-
-    #def get_queryset(self): #warning TODO get_queryset
-
-    #def get_context_data(self, **kwargs): #warning TODO get_context_data
-
-
-class TechnocracySpheresDetailView(DetailView):
-    model = models.TechnocracySpheres
-
-
 class TechnocracySpheresCreateView(CreateView):
     model = models.TechnocracySpheres
     fields = '__all__'

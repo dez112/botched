@@ -1,9 +1,34 @@
-{% extends 'mage/base_detail.html' %}
-{% block details %}
-<ul>
-{% for base in spheres %}
-    <li><{{ base }} </li>
-{% endfor %}
-</ul>
+{% block mage %}
+    <h4><strong>Tradition: {{spheres.tradition}}</strong></h4>
+    <div class="row">
+        <div class="col-sm-4"><p>Avatar: {{ spheres.avatar }}</p></div>
+        <div class="col-sm-4"><p>Essence: {{spheres.essence}}</p></div>
+        <div class="col-sm-4"><p>Affinity Sphere: {{spheres.affinity_sphere}}</p></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <ul class="list-group">
+                <li class="list-group-item">Correspondence: {{ spheres.correspondence }}</li>
+                <li class="list-group-item">Entropy: {{ spheres.entropy }}</li>
+                <li class="list-group-item">Forces: {{ spheres.forces }}</li>
+        </div>
+        <div class="col-sm-4">
+             <ul class="list-group">
+                 <li class="list-group-item">Life: {{ spheres.life }}</li>
+                 <li class="list-group-item">Matter: {{ spheres.matter }}</li>
+                 <li class="list-group-item">Mind: {{ spheres.mind }}</li>
+             </ul>
+        </div>
+        <div class="col-sm-4">
+             <ul class="list-group">
+                 <li class="list-group-item">Prime: {{ spheres.prime }}</li>
+                 <li class="list-group-item">Spirit: {{ spheres.spirit }}</li>
+                 <li class="list-group-item">Time: {{ spheres.time }}</li>
+             </ul>
+        </div>
+
+        </div>
 
 {% endblock %}
+
+{% block add_sphere %} {% endblock %}

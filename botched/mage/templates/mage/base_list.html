@@ -4,11 +4,15 @@
 {% block section_title %}Characters{% endblock %}
 
 {% block content %}
-{% for base in object_list %}
-   <a href="{% url 'base-detail-view' pk=base.id %}">{{ base.picture }}</a><br/>
-{% empty %}
-    No characters yet.
-{% endfor %}
+    <div class="col-lg-8 col-lg-offset-2">
+        <p>
+    {% for base in object_list %}
+       <a href="{% url 'base-detail-view' pk=base.id %}">{{ base.picture }}</a><br/>
+    {% empty %}
+        No characters yet.
+    {% endfor %}
+        </p>
+    </div>
 
 {% endblock %}
 

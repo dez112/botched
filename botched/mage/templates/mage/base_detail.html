@@ -1,21 +1,66 @@
 {% extends 'base.html' %}
+
+{% block section_title %} {{ object.name }} {% endblock %}
 {% block content %}
-<p><a href="{% url 'base-update-view' pk=object.pk %}">Edit</a></p>
 
-<p>Chronicle: {{ object.chname }}</p>
-<h1>{{ object.name }}</h1>
-<h3>Player: {{ object.player }}</h3>
-<p>Nature: {{ object.nature }}</p>
-<p>Demenor: {{ object.demenor }}</p>
-<p>Willpower: {{ object.willpower }}</p>
-<p>Traits: {{ object.traits }}</p>
+    <p><a href="{% url 'base-update-view' pk=object.pk %}">Edit</a></p>
+    <p><strong>Chronicle: {{ object.chname }}</strong></p>
 
-<p><a href="{% url 'attributes-create-view' %}?mage={{ object.id }}">Add Attributes</a> </p>
-<p><a href="{% url 'abilities-create-view' %}?mage={{ object.id }}">Add Abilities</a> </p>
+    <div class="col-sm-4">
+        <p>Nature: {{ object.nature }}</p>
+        <p>Demenor: {{ object.demenor }}</p>
+        <p>Willpower: {{ object.willpower }}</p>
+    </div>
+    <div class="col-sm-4">
+        <p>Traits: {{ object.traits }}</p>
+        <p>Backgrounds: {{object.backgrounds }}</p>
+    </div>
+    <div class="col-sm-4">
+        {% if object.is_mage %}
+            <p>Mage: True</p>
+        {% else %}
+            <p>Mage: False</p>
+        {% endif %}
+        {% if object.is_technocrat %}
+            <p>Technocrat: True</p>
+        {% else %}
+            <p>Technocrat: False</p>
+        {% endif %}
 
-{% block details %}
+        {% if object.is_player_character %}
+            <p><strong>Player: {{ object.player }}</strong></p>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block mage %}
+    {% if object.is_mage %}
+        {% include "mage/base_detail_m.html" %}
+    {% endif %}
+
+    {% if object.is_technocrat %}
+        {% include "mage/base_detail_t.html" %}
+    {% endif %}
 
 {% endblock %}
+
+{% block add_new %}
+
+    <ul class="list-inline banner-social-buttons">
+        <li>
+        <a href="{% url 'attributes-create-view' %}?mage={{ object.id }}" class="btn btnghost btn-lg">Add Attributes</a>
+        </li>
+        <li>
+        <a href="{% url 'abilities-create-view' %}?mage={{ object.id }}" class="btn btnghost btn-lg">Add Abilities</a>
+        </li>
+        {% block add_sphere %}
+            {% if object.is_mage %}
+                {% include "mage/base_detail_add_sphere_link.html" %}
+            {% elif object.is_technocrate %}
+                {% include "mage/base_detail_add_techsphere_link.html" %}
+            {% endif %}
+        {% endblock %}
+    </ul>
 
 {% endblock %}
 

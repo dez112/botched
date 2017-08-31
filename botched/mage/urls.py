@@ -62,36 +62,24 @@ urlpatterns = [
         name="abilities-update-view"),
 
 ############################################### SPHERES
-#/mage/characters
-    url(r'^characters/$', views.BaseListView.as_view(), name="base-list"),
-
-    #mage/characters/pk
-    url(r'^characters/(?P<pk>(\d)+)', views.BaseDetailView.as_view(), name="base-detail-view"),
-
-    #/mage/characters/add-character
-    url(r'^characters/add-character', views.BaseCreateView.as_view(), name="base-create-view"),
+    #/mage/characters/add-sphere
+    url(r'^characters/add-sphere', views.SpheresCreateView.as_view(), name="spheres-create-view"),
 
     #/mage/characters/delete-character/pk
-    url(r'^characters/delete-character/(?P<pk>(\d)+)', views.BaseDeleteView.as_view(), name="base-delete-view"),
+    url(r'^characters/delete-sphere/(?P<pk>(\d)+)', views.SpheresUpdateView.as_view(), name="spheres-delete-view"),
 
     #/mage/characters/edit-character/pk
-    url(r'^characters/edit-character/(?P<pk>(\d)+)', views.BaseUpdateView.as_view(), name="base-update-view"),
+    url(r'^characters/edit-sphere/(?P<pk>(\d)+)', views.SpheresDeleteView.as_view(), name="spheres-update-view"),
 
 ############################################### TECHNOCRACY SPHERES
-    #/mage/characters
-    url(r'^characters/$', views.BaseListView.as_view(), name="base-list"),
-
-    #mage/characters/pk
-    url(r'^characters/(?P<pk>(\d)+)', views.BaseDetailView.as_view(), name="base-detail-view"),
-
-    #/mage/characters/add-character
-    url(r'^characters/add-character', views.BaseCreateView.as_view(), name="base-create-view"),
+    #/mage/characters/add-techsphere
+    url(r'^characters/add-techsphere', views.TechnocracySpheresCreateView.as_view(), name="techsphere-create-view"),
 
     #/mage/characters/delete-character/pk
-    url(r'^characters/delete-character/(?P<pk>(\d)+)', views.BaseDeleteView.as_view(), name="base-delete-view"),
+    url(r'^characters/delete-techsphere/(?P<pk>(\d)+)', views.TechnocracySpheresUpdateView.as_view(), name="techsphere-delete-view"),
 
     #/mage/characters/edit-character/pk
-    url(r'^characters/edit-character/(?P<pk>(\d)+)', views.BaseUpdateView.as_view(), name="base-update-view"),
+    url(r'^characters/edit-techsphere/(?P<pk>(\d)+)', views.TechnocracySpheresDeleteView.as_view(), name="techsphere-update-view"),
 
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

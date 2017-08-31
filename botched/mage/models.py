@@ -47,7 +47,7 @@ class Base(models.Model):
         (21, "Visionary")
     ]
 
-    player = models.CharField(max_length=200)
+    player = models.CharField(max_length=200, blank=True, null=True)
     chname = models.ForeignKey('Chronicle', verbose_name="Chronicle name")
     name = models.CharField(max_length=200)
     nature = models.IntegerField(choices=NATURE_CHOICES, blank=True)
@@ -155,6 +155,9 @@ class Spheres(models.Model):
 
     def __str__(self):
         return "{}".format(self.name)
+    
+    def get_absolute_url(self):
+        return reverse('base-detail-view', kwargs={'pk': self.id})
 
 class TechnocracySpheres(models.Model):
     AFFINITY_SPHERE = [(1, "Data"), (2, "Dimensional Science"), (3, "Entropy"), (4, "Forces"), (5, "Life"),

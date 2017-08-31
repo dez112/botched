@@ -56,19 +56,24 @@
 <div class="container content-section text-center">
 	<div class="row">
 		<h2>{% block section_title %} {% endblock %}</h2>
-		<div class="col-lg-8 col-lg-offset-2">
-			<p>
+
 				{% block content %}
 
                 {% endblock %}
 			</p>
-			<p>
+    </div>
+    <div class="row">
+        {% block mage %}
+
+        {% endblock %}
+    </div>
+
+    <div class="row">
                 {% block add_new %}
                 {% endblock %}
 
-			</p>
-		</div>
-	</div>
+    </div>
+
 </div>
 </section>
 

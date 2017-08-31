@@ -1,0 +1,32 @@
+{% block mage %}
+    <h4><strong>Tradition: {{techspheres.Union}}</strong></h4>
+    <div class="row">
+        <div class="col-sm-4"><p>Avatar: {{ techspheres.avatar }}</p></div>
+        <div class="col-sm-4"><p>Essence: {{techspheres.essence}}</p></div>
+        <div class="col-sm-4"><p>Affinity Sphere: {{techspheres.affinity_sphere}}</p></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            <ul class="list-group">
+                <li class="list-group-item">Correspondence: {{ techspheres.data }}</li>
+                <li class="list-group-item">Entropy: {{ techspheres.entropy }}</li>
+                <li class="list-group-item">Forces: {{ techspheres.forces }}</li>
+        </div>
+        <div class="col-sm-4">
+             <ul class="list-group">
+                 <li class="list-group-item">Life: {{ techspheres.life }}</li>
+                 <li class="list-group-item">Matter: {{ techspheres.matter }}</li>
+                 <li class="list-group-item">Mind: {{ techspheres.mind }}</li>
+             </ul>
+        </div>
+        <div class="col-sm-4">
+             <ul class="list-group">
+                 <li class="list-group-item">Prime: {{ techspheres.primal_utility }}</li>
+                 <li class="list-group-item">Spirit: {{ techspheres.dimensional_science }}</li>
+                 <li class="list-group-item">Time: {{ techspheres.time }}</li>
+             </ul>
+        </div>
+
+        </div>
+
+{% endblock %}
