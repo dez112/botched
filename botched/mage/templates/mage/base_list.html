@@ -3,19 +3,30 @@
 
 {% block section_title %}Characters{% endblock %}
 
+
 {% block content %}
-    <div class="col-lg-8 col-lg-offset-2">
-        <p>
+<div class="row">
     {% for base in object_list %}
-       <a href="{% url 'base-detail-view' pk=base.id %}">{{ base.picture }}</a><br/>
+        <div class="col-md-3">
+                <div class="thumbnail">
+                    <a href="{% url 'base-detail-view' pk=base.id %}">
+                        <img src="{{ base.picture }}"  class="img-rounded" style="max-height: 300px">
+                        <div class="caption text-center">
+                            <p>{{ base.name }}</p>
+                        </div>
+                    </a>
+                </div>
+        </div>
+        {% if forloop.counter|divisibleby:"4" and not forloop.last %}
+            </div><div class="row">
+        {% endif %}
     {% empty %}
         No characters yet.
     {% endfor %}
-        </p>
     </div>
 
 {% endblock %}
-
 {% block add_new %}
     <a href="{% url 'base-create-view' %}" class="btnghost">Add Character</a>
 {% endblock %}
+

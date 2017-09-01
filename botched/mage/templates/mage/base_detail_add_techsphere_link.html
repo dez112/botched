@@ -1,3 +1,7 @@
 <li>
-    <a href="{% url 'techsphere-create-view' %}?mage={{ object.id }}" class="btn btnghost btn-lg">Add Spheres</a>
-</li>
+    {% if techspheres is None %}
+        <a href="{% url 'techsphere-create-view' %}?mage={{ techspheres.id }}" class="btn btnghost btn-lg">Add Spheres</a>
+    {% else %}
+        <a href="{% url 'techsphere-update-view' pk=techspheres.id %}?mage={{ object.id }}" class="btn btnghost btn-lg">Edit Spheres</a>
+    {% endif %}
+</li

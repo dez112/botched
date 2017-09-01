@@ -1,9 +1,6 @@
 from django.db import models
 from django.urls import reverse
 
-#TODO rozwazyc dodanie verbose names
-#TODO rozwazyc osobna tabelke dla secondary abilities
-
 ESSENCE_CHOICES = [
     (1, "Dynamic"),
     (2, "Static"),
@@ -12,9 +9,9 @@ ESSENCE_CHOICES = [
     (5, "None")
 ]
 
-
 class Chronicle(models.Model):
     name = models.CharField(max_length=250)
+    description = models.TextField(null=True, blank=True)
 
     def __str__(self):
         return self.name
@@ -48,11 +45,11 @@ class Base(models.Model):
     ]
 
     player = models.CharField(max_length=200, blank=True, null=True)
-    chname = models.ForeignKey('Chronicle', verbose_name="Chronicle name")
+    chname = models.ForeignKey('Chronicle', verbose_name="Chronicle name", on_delete=models.CASCADE)
     name = models.CharField(max_length=200)
     nature = models.IntegerField(choices=NATURE_CHOICES, blank=True)
     demenor = models.IntegerField(choices=NATURE_CHOICES, blank=True)
-    willpower = models.PositiveIntegerField(blank=True) #TODO dodac walidator 1-10
+    willpower = models.PositiveIntegerField(null=True, blank=True)
     traits = models.TextField(null=True, default="Empty", blank=True)
     backgrounds = models.TextField(null=True, default="Empty", blank=True)
     is_technocrat = models.BooleanField(default=False, blank=True)
@@ -60,7 +57,7 @@ class Base(models.Model):
     #is_independent_mage = models.BooleanField(default=False, blank=True)
     is_enemy = models.BooleanField(blank=True)
     is_player_character = models.BooleanField(default=False, blank=True)
-    picture = models.ImageField(upload_to='photos/', blank=True, null=True, default='/media/photos/nophoto.jpg')
+    picture = models.URLField(max_length=1000, default='http://www.petakids.com/wp-content/uploads/2015/11/Cute-Red-Bunny.jpg')
 
     def __str__(self):
         return self.name
@@ -69,32 +66,28 @@ class Base(models.Model):
         return reverse('base-detail-view', kwargs={'pk': self.id})
         #return reverse('base-list')
     
-    def get_nature_display(self):
-        return "{}".format(self.nature)
-    
-    def get_demenor_display(self):
-        return "{}".format(self.demenor)
-
 
 class Attributes(models.Model):
-    name = models.ForeignKey('Base')
-    strength = models.IntegerField(null=True, blank=True)
-    dexterity = models.IntegerField(null=True, blank=True)
-    stamina = models.IntegerField(null=True, blank=True)
-    charisma = models.IntegerField(null=True, blank=True)
-    manipulation = models.IntegerField(null=True, blank=True)
-    apperance = models.IntegerField(null=True, blank=True, verbose_name="appearance")
-    perception = models.IntegerField(null=True, blank=True)
-    intelligencee = models.IntegerField(null=True, blank=True, verbose_name="intelligence")
-    wits = models.IntegerField(null=True, blank=True)
+    name = models.OneToOneField('Base', on_delete=models.CASCADE)
+    strength = models.IntegerField(null=True, blank=True, default=1)
+    dexterity = models.IntegerField(null=True, blank=True, default=1)
+    stamina = models.IntegerField(null=True, blank=True, default=1)
+    charisma = models.IntegerField(null=True, blank=True, default=1)
+    manipulation = models.IntegerField(null=True, blank=True, default=1)
+    apperance = models.IntegerField(null=True, blank=True, verbose_name="appearance", default=1)
+    perception = models.IntegerField(null=True, blank=True, default=1)
+    intelligencee = models.IntegerField(null=True, blank=True, verbose_name="intelligence", default=1)
+    wits = models.IntegerField(null=True, blank=True, default=1)
     date_sent = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return "{}".format(self.name)
-     
+    
+    def get_absolute_url(self):
+        return reverse('base-detail-view', kwargs={'pk': self.name.id})
 
 class Abilities(models.Model):
-    name = models.ForeignKey('Base')
+    name = models.OneToOneField('Base', on_delete=models.CASCADE)
     alertness = models.IntegerField(null=True, blank=True)
     art = models.IntegerField(null=True, blank=True)
     athletics = models.IntegerField(null=True, blank=True)
@@ -107,6 +100,7 @@ class Abilities(models.Model):
     streetwise = models.IntegerField(null=True, blank=True)
     subterfuge = models.IntegerField(null=True, blank=True)
     crafts = models.IntegerField(null=True, blank=True)
+    secondary_talents = models.CharField(max_length=300, null=True, blank=True)
     drive = models.IntegerField(null=True, blank=True)
     etiquette = models.IntegerField(null=True, blank=True)
     firearms = models.IntegerField(null=True, blank=True)
@@ -117,6 +111,7 @@ class Abilities(models.Model):
     stealth = models.IntegerField(null=True, blank=True)
     survival = models.IntegerField(null=True, blank=True)
     technology = models.IntegerField(null=True, blank=True)
+    secondary_skills = models.CharField(max_length=300, null=True, blank=True)
     academics = models.IntegerField(null=True, blank=True)
     computer = models.IntegerField(null=True, blank=True)
     cosmology = models.IntegerField(null=True, blank=True)
@@ -128,16 +123,20 @@ class Abilities(models.Model):
     occult = models.IntegerField(null=True, blank=True)
     politics = models.IntegerField(null=True, blank=True)
     science = models.IntegerField(null=True, blank=True)
-    secondary_abilities = models.CharField(max_length=300, null=True, blank=True)
+    secondary_knowledges = models.CharField(max_length=300, null=True, blank=True)
     date_sent = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return "{}".format(self.name)
     
+    def get_absolute_url(self):
+        return reverse('base-detail-view', kwargs={'pk': self.name.id})
+
+    
 class Spheres(models.Model):
     AFFINITY_SPHERE = [(1, "Correspondence"), (2, "Entropy"), (3, "Forces"), (4, "Life"),
                       (5, "Matter"), (6, "Mind"), (7, "Prime"), (8, "Spirit"), (9, "Time")]
-    name = models.ForeignKey('Base')
+    name = models.OneToOneField('Base', on_delete=models.CASCADE)
     tradition = models.CharField(max_length=200, null=True, blank=True)
     avatar = models.PositiveIntegerField(null=True, blank=True)
     essence = models.IntegerField(choices=ESSENCE_CHOICES, blank=True)
@@ -157,12 +156,15 @@ class Spheres(models.Model):
         return "{}".format(self.name)
     
     def get_absolute_url(self):
-        return reverse('base-detail-view', kwargs={'pk': self.id})
+        return reverse('base-detail-view', kwargs={'pk': self.name.id})
+
+    def get_success_url(self):
+        return reverse('base-detail-view', kwargs={'pk': self.name.id})
 
 class TechnocracySpheres(models.Model):
     AFFINITY_SPHERE = [(1, "Data"), (2, "Dimensional Science"), (3, "Entropy"), (4, "Forces"), (5, "Life"),
                        (6, "Matter"), (7, "Mind"), (8, "Primal Utility"), (9, "Time")]
-    name = models.ForeignKey('Base')
+    name = models.OneToOneField('Base', on_delete=models.CASCADE)
     Union = models.CharField(max_length=200, null=True, blank=True)
     avatar = models.PositiveIntegerField(null=True, blank=True)
     essence = models.IntegerField(choices=ESSENCE_CHOICES, blank=True)
@@ -177,9 +179,12 @@ class TechnocracySpheres(models.Model):
     time = models.IntegerField(null=True, blank=True)
     affinity_sphere = models.IntegerField(choices=AFFINITY_SPHERE, null=True, blank=True)
     date_sent = models.DateTimeField(auto_now_add=True, blank=True)
-
+    
     def __str__(self):
         return "{}".format(self.name)
+    
+    def get_absolute_url(self):
+        return reverse('base-detail-view', kwargs={'pk': self.name.id})
 
 
 

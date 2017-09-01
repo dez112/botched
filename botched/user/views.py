@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, render_to_response
 from .forms import SignUpForm
 
 def index(request):
-    return render_to_response('users/index.html')
+    return render( request, 'users/index.html')
 
 def signup(request):
     if request.method == 'POST':

@@ -1,17 +1,51 @@
-
-
 {% extends 'mage/base_detail.html' %}
 {% block details %}
-<h3>Attributes </h3>
-<p>strength: {{ object.strength }}</p>
-<p>dexterity: {{ object.dexterity }}</p>
-<p>stamina: {{ object.stamina }}</p>
-<p>charisma: {{ object.charisma }}</p>
-<p>manipulation: {{ object.manipulation }}</p>
-<p>apperance: {{ object.apperance }}</p>
-<p>perception: {{ object.perception }}</p>
-<p>intelligencee: {{ object.intelligencee }}</p>
-<p>wits: {{ object.wits }}</p>
+<h4><strong>Attributes</strong></h4>
+    <div class="row">
+        <div class="col-sm-4">
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Physical</strong></li>
+                <li class="list-group-item">Strength: {{ attr.strength }}</li>
+                <li class="list-group-item">Dexterity: {{ attr.dexterity }}</li>
+                <li class="list-group-item">Stamina: {{ attr.stamina }}</li>
+            </ul>
+        </div>
+         <div class="col-sm-4">
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Social</strong></li>
+                <li class="list-group-item">Charisma: {{ attr.charisma }}</li>
+                <li class="list-group-item">Manipulation: {{ attr.manipulation }}</li>
+                <li class="list-group-item">Apperance: {{ attr.apperance }}</li>
+            </ul>
+        </div>
+         <div class="col-sm-4">
+            <ul class="list-group">
+                <li class="list-group-item"><strong>Mental</strong></li>
+                <li class="list-group-item">Perception: {{ attr.perception }}</li>
+                <li class="list-group-item">Intelligence: {{ attr.intelligencee }}</li>
+                <li class="list-group-item">Wits: {{ attr.wits }}</li>
+            </ul>
+        </div>
+    </div>
 
+{% endblock %}
+
+{% block add_new %}
+
+    <ul class="list-inline banner-social-buttons">
+        <li>
+        <a href="{% url 'attributes-update-view' pk=attr.id %}?mage={{ object.id }} " class="btn btnghost btn-lg">Edit Attributes</a>
+        </li>
+        <li>
+        <a href="{% url 'abilities-create-view' %}?mage={{ object.id }}" class="btn btnghost btn-lg">Add Abilities</a>
+        </li>
+        {% block add_sphere %}
+            {% if object.is_mage %}
+                {% include "mage/base_detail_add_sphere_link.html" %}
+            {% elif object.is_technocrate %}
+                {% include "mage/base_detail_add_techsphere_link.html" %}
+            {% endif %}
+        {% endblock %}
+    </ul>
 
 {% endblock %}

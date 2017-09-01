@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="description" content="">
 <meta name="author" content="">
-<title>ARIES - Free Bootstrap Theme by WowThemes.net</title>
+<title>Botched</title>
 <!-- Bootstrap Core CSS -->
 <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
 <!-- Custom CSS -->
@@ -32,18 +31,30 @@
 		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-main-collapse">
 		<i class="fa fa-bars"></i>
 		</button>
-		<a class="navbar-brand page-scroll" href="index.html">
-		ARIES </a>
+		<a class="navbar-brand page-scroll" href="{% url 'home' %}">
+		BOTCHED </a>
 	</div>
 	<!-- Collect the nav links, forms, and other content for toggling -->
 	<div class="collapse navbar-collapse navbar-right navbar-main-collapse">
 		<ul class="nav navbar-nav">
-			<li>
-			<a href="{% url 'home' %}">Home</a>
-			</li>
-            <li>
-			<a href="{% url 'chronicle-list' %}">Chronicles</a>
-			</li>
+
+ 			{% if user.is_authenticated %}
+                <li>
+			    	<a href="{% url 'chronicle-list' %}">Chronicles</a>
+			    </li>
+				<li>
+			    	<a href="{% url 'logout' %}">Logout</a>
+			    </li>
+			{% else %}
+                <li>
+
+			    <a href="{% url 'login' %}">Log in</a>
+			    </li>
+				<li>
+			    <a href="{% url 'signup' %}">Sign up</a>
+			    </li>
+
+            {% endif %}
 		</ul>
 	</div>
 	<!-- /.navbar-collapse -->
@@ -60,9 +71,7 @@
 				<p class="intro-text">
 					Made to make your players suffer.
 				</p>
-				<a href="#about" class="btn btn-circle page-scroll">
-				<i class="fa fa-angle-double-down animated"></i>
-				</a>
+
 			</div>
 		</div>
 	</div>

@@ -1,11 +1,14 @@
-from django.shortcuts import render
+from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.views.generic import TemplateView
 from django.views.generic.edit import CreateView, UpdateView
 from django.views import View
+from django.urls import reverse
 from django.forms.models import model_to_dict
 from django.core.exceptions import ObjectDoesNotExist
+
 from . import models
 
 
@@ -96,16 +99,16 @@ class BaseDetailView(View):
 class BaseCreateView(CreateView):
     model = models.Base
     fields = ['player', 'chname', 'name', 'nature', 'demenor', 'willpower', 'traits', 'backgrounds', 'is_technocrat',
-              'is_mage', 'is_enemy', 'is_player_character', ]
+              'is_mage', 'is_enemy', 'is_player_character', 'picture']
     template_name = "mage/generic_form.html"
-
+            
+    #def form_valid(self, form):
+        
 
 class BaseUpdateView(UpdateView):
     model = models.Base
     fields = '__all__'
     template_name = "mage/generic_form.html"
-
-#class
 
 
 class BaseDeleteView(DetailView): #TODO delete view - nie dziala :(
@@ -118,13 +121,12 @@ class AttributesCreateView(CreateView):
     fields = ['strength', 'dexterity', 'stamina', 'charisma', 'manipulation', 'apperance', 'perception',
               'intelligencee', 'wits'] 
     template_name = "mage/generic_form.html"
-    success_url = "mage/chronicle_welcome.html" #TODO poprawic, bo nie działa. Jak miałoby?
 
     def form_valid(self, form):
         obj = form.save(commit=False)
         obj.name_id = int(self.request.GET['mage'])
         obj.save()
-        return render(self.request, self.success_url)
+        return HttpResponseRedirect(reverse('base-detail-view', kwargs={'pk': obj.name_id}))
 
 
 class AttributesUpdateView(UpdateView):
@@ -143,14 +145,13 @@ class AbilitiesCreateView(CreateView):
     model = models.Abilities
     fields = '__all__'
     template_name = "mage/generic_form.html"
-    #TODO dodac sucess url, bo dupa :(
-    
+       
     def form_valid(self, form):
         obj = form.save(commit=False)
         obj.name_id = int(self.request.GET['mage'])
         obj.save()
-        return render(self.request, self.success_url)
-
+        return HttpResponseRedirect(reverse('base-detail-view', kwargs={'pk': obj.name_id}))
+    
 
 class AbilitiesUpdateView(UpdateView):
     model = models.Abilities
@@ -173,6 +174,7 @@ class SpheresUpdateView(UpdateView):
     model = models.Spheres
     fields = '__all__'
     template_name = "mage/generic_form.html"
+
 
 
 class SpheresDeleteView(DetailView): #TODO delete view - nie dziala :(

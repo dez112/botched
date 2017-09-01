@@ -20,9 +20,6 @@ urlpatterns = [
     #mage/chronicle/characters/pk
     url(r'^chronicle/characters/(?P<pk>(\d)+)$', views.BaseListView.as_view(), name="base-list"),
 
-    #/mage/characters/pk
-
-
     #mage/characters/pk
     url(r'^characters/(?P<pk>(\d)+)', views.BaseDetailView.as_view(), name="base-detail-view"),
 
@@ -66,10 +63,10 @@ urlpatterns = [
     url(r'^characters/add-sphere', views.SpheresCreateView.as_view(), name="spheres-create-view"),
 
     #/mage/characters/delete-character/pk
-    url(r'^characters/delete-sphere/(?P<pk>(\d)+)', views.SpheresUpdateView.as_view(), name="spheres-delete-view"),
+    url(r'^characters/edit-sphere/(?P<pk>(\d)+)', views.SpheresUpdateView.as_view(), name="spheres-update-view"),
 
     #/mage/characters/edit-character/pk
-    url(r'^characters/edit-sphere/(?P<pk>(\d)+)', views.SpheresDeleteView.as_view(), name="spheres-update-view"),
+    url(r'^characters/delete-sphere/(?P<pk>(\d)+)', views.SpheresDeleteView.as_view(), name="spheres-delete-view"),
 
 ############################################### TECHNOCRACY SPHERES
     #/mage/characters/add-techsphere

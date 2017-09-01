@@ -7,8 +7,8 @@
     <p><strong>Chronicle: {{ object.chname }}</strong></p>
 
     <div class="col-sm-4">
-        <p>Nature: {{ object.nature }}</p>
-        <p>Demenor: {{ object.demenor }}</p>
+        <p>Nature: {{ object.get_nature_display }}</p>
+        <p>Demenor: {{ object.get_demenor_display }}</p>
         <p>Willpower: {{ object.willpower }}</p>
     </div>
     <div class="col-sm-4">
