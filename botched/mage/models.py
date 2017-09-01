@@ -9,6 +9,7 @@ ESSENCE_CHOICES = [
     (5, "None")
 ]
 
+
 class Chronicle(models.Model):
     name = models.CharField(max_length=250)
     description = models.TextField(null=True, blank=True)
@@ -19,6 +20,7 @@ class Chronicle(models.Model):
     def get_absolute_url(self):
         return reverse('chronicle-list')
         # return reverse('base-list')
+
 
 class Base(models.Model):
     NATURE_CHOICES = [
@@ -85,6 +87,7 @@ class Attributes(models.Model):
     
     def get_absolute_url(self):
         return reverse('base-detail-view', kwargs={'pk': self.name.id})
+
 
 class Abilities(models.Model):
     name = models.OneToOneField('Base', on_delete=models.CASCADE)
@@ -160,6 +163,7 @@ class Spheres(models.Model):
 
     def get_success_url(self):
         return reverse('base-detail-view', kwargs={'pk': self.name.id})
+
 
 class TechnocracySpheres(models.Model):
     AFFINITY_SPHERE = [(1, "Data"), (2, "Dimensional Science"), (3, "Entropy"), (4, "Forces"), (5, "Life"),

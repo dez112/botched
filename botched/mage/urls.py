@@ -3,10 +3,7 @@ from . import views
 from django.conf import settings
 from django.conf.urls.static import static
 
-#TODO dodac base.html + ogarnac bootstrapa
 urlpatterns = [
-    #url(r'^',),
-
     #/mage/chronicle
     url(r'^chronicle/$', views.ChronicleListView.as_view(), name="chronicle-list"),
 
@@ -77,6 +74,10 @@ urlpatterns = [
 
     #/mage/characters/edit-character/pk
     url(r'^characters/edit-techsphere/(?P<pk>(\d)+)', views.TechnocracySpheresDeleteView.as_view(), name="techsphere-update-view"),
+
+############################################### STUFF
+    #/mage/characters/find-npc
+    url(r'^characters/find-npc', views.NpcSearchView.as_view(), name="find-npc"),
 
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,14 +1,13 @@
 from django.http import HttpResponseRedirect
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
 from django.views.generic import TemplateView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, FormView
 from django.views import View
 from django.urls import reverse
-from django.forms.models import model_to_dict
 from django.core.exceptions import ObjectDoesNotExist
-
+from . import forms
 from . import models
 
 
@@ -198,4 +197,41 @@ class TechnocracySpheresDeleteView(DetailView): #TODO delete view - nie dziala :
     model = models.TechnocracySpheres
 
 
+####### Stuff
 
+class NpcSearchView(FormView):
+    pass
+    # template_name = 'mage/generic_form.html'
+    # model = models.Base
+    # fields = ['name']
+    
+    # def form_valid(self, form):
+    #     name = form.cleaned_data['name']
+    #     npc_list = models.Base.objects.filter(
+    #         name__icontains=name,
+    #     )
+    #     return render(self.request, self.template_name, {
+    #         'form': form,
+    #         'results': npc_list,
+    #     })
+
+    # 
+    # def get(self, request):
+    #     return render(request, 'exercises/student_search_form.html', {
+    #         'form': forms(),
+    #     })
+    # 
+    # def post(self, request):
+    #     form = StudentSearchForm(data=request.POST)
+    #     student_list = Student.objects.none()
+    # 
+    #     if form.is_valid():
+    #         last_name = form.cleaned_data['last_name']
+    #         student_list = Student.objects.filter(
+    #             last_name__icontains=last_name,
+    #         )
+    # 
+    #     return render(request, 'exercises/student_search_form.html', {
+    #         'form': form,
+    #         'results': student_list,
+    #     })

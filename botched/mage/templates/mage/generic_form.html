@@ -2,12 +2,29 @@
 {% block content %}
 
 <form action="#" method="POST">
-{% csrf_token %}
+    <div class="row">
+    <div class="form-group">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="col-md-4" style="text-align: right">
+            {{ field.errors }}
+            {{ field.label_tag }} {{ field }}
+            {% if field.help_text %}
+                <p class="help">{{ field.help_text|safe }}</p>
+            {% endif %}
+         </div>
+        {% if forloop.counter|divisibleby:"3" and not forloop.last %}
+            </div><div class="row">
+        {% endif %}
+        {% endfor %}
 
-    {{form}}
 
-    <input type="submit" value="Submit"/>
+
+        <input type="submit" value="Submit"/>
+    </div>
+</div>
 </form>
+
 
 
 {% endblock %}
